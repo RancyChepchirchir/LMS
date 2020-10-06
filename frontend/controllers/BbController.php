@@ -81,6 +81,16 @@ class BbController extends Controller
         return true;
     }
 
+    public function actionReturnbook($id){
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->updateAfterDelete($model->bookId);
+            return $this->redirect(['index']);
+        }
+        return $this->renderAjax('returnbook',[
+            'model'=>$model,
+        ]);
+    }
     /**
      * Updates an existing BorrowedBook model.
      * If update is successful, the browser will be redirected to the 'view' page.

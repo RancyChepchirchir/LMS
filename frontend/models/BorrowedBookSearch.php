@@ -40,7 +40,7 @@ class BorrowedBookSearch extends BorrowedBook
      */
     public function search($params)
     {
-        $query = BorrowedBook::find();
+        $query = BorrowedBook::find()->where(['actualReturn'=>NULL]);
 
         // add conditions that should always apply here
 

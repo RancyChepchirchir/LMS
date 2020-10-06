@@ -19,4 +19,15 @@ $(document).ready(function() {
         });
 	});
 
+
+	$('.returnbook').click(function(e){
+			e.preventDefault();
+			var id = $(this).attr("val");
+	       $.get('returnbook?id='+id,function(data){
+				$('#returnbook').modal('show')
+			 		.find('#returnbookContent')
+			 		.html(data);
+        });
+	});
+
 });

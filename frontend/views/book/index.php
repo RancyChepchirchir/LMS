@@ -1,19 +1,8 @@
-<?php
-
+<?php // echo $this->render('_search', ['model' => $searchModel]);
 use yii\helpers\Html;
 use yii\grid\GridView;
-
-/* @var $this yii\web\View */
-/* @var $searchModel frontend\models\BookSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = 'List Books';
-$this->params['breadcrumbs'][] = $this->title;
+use yii\bootstrap\Modal;
 ?>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-
 <div class="box box-info">
             <div class="box-header with-border">
           <?= Html::a('Create Book', ['create'], ['class' => 'btn btn-success']) ?>
@@ -38,7 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'bookName',
                         'referenceNo',
                         'publisher',
-                        'status',
 
                         ['class' => 'yii\grid\ActionColumn'],
                     ],
