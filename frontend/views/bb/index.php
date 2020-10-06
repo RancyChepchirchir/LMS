@@ -9,8 +9,8 @@ use frontend\models\Book;
 $this->title = 'MY LMS';
 $this->params['breadcrumbs'][] = $this->title;
 $totalBooks = Book::find()->asArray()->all();
-$bb //= BorrowedBook::find()->asArray()->all();
-$totalStudents //= Student::find()->asArray()->all();
+$bb = BorrowedBook::find()->asArray()->all();
+$totalStudents = Student::find()->asArray()->all();
 ?>
 <div class="row">
         <div class="col-md-3 col-sm-6 col-xs-12">
