@@ -67,9 +67,9 @@ class BookController extends Controller
     {
         $model = new Book();
         $bookAuthor = New BookAuthor();
-        
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            
+
             $authorId = Yii::$app->request->post()['BookAuthor']['authorId'];
             $bookId = $model->bookId;
             if($this->bookauthors($authorId,$bookId)){
@@ -83,31 +83,47 @@ class BookController extends Controller
             'bookAuthor'=>$bookAuthor
         ]);
     }
-    
+
     public function actionAddauthor()
     {
         $model = new \frontend\models\Author();
-        
+
         if ($model->load(Yii::$app->request->post())) {
             if ($model->validate() && $model->save()) {
                 return $this->redirect(['create']);
             }
         }
-        
+
         return $this->renderAjax('addauthor', [
             'model' => $model,
         ]);
     }
-    
+
     public function bookauthors($authorId,$bookId){
         $model = New BookAuthor();
         $data= array('BookAuthor'=>['bookId'=>$bookId,'authorId'=>$authorId]);
-        
+
         if($model->load($data) && $model->save()){
             return true;
         }
         return false;
     }
+
+    public function actionRequestBook()
+{
+    $model = new \frontend\models\Book();
+
+    if ($model->load(Yii::$app->request->post())) {
+        if ($model->validate()) {
+            // form inputs are valid, do something here
+            return;
+        }
+    }
+
+    return $this->render('requestBook', [
+        'model' => $model,
+    ]);
+}
 
     /**
      * Updates an existing Book model.

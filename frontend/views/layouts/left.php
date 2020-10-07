@@ -82,8 +82,8 @@
             [
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
-                    ['label' => 'DASHBOARD', 'icon' => 'home', 'url' => ['/site/index']],
-                    ['label' => 'CATALOG', 'icon' => 'book', 'url' => ['/book/index']],
+                  //  ['label' => 'DASHBOARD', 'icon' => 'home', 'url' => ['/site/index']],
+                    ['label' => 'CATALOG', 'icon' => 'book', 'url' => ['/book/index'], 'return'],
                 ],
             ]
         ) ?>
