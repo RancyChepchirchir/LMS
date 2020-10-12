@@ -1,37 +1,32 @@
 <?php
-
-/* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \frontend\models\SignupForm */
-
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 
-$this->title = 'Signup';
+/* @var $this yii\web\View */
+/* @var $form yii\bootstrap\ActiveForm */
+/* @var $model \common\models\LoginForm */
+
+$this->title = 'Sign In';
 
 $fieldOptions1 = [
-    'options' => ['class' => 'form-group has-feedback'],
-    'inputTemplate' => "{input}<span class='glyphicon glyphicon-user form-control-feedback'></span>"
-];
-
-$fieldOptions2 = [
     'options' => ['class' => 'form-group has-feedback'],
     'inputTemplate' => "{input}<span class='glyphicon glyphicon-envelope form-control-feedback'></span>"
 ];
 
-$fieldOptions3 = [
+$fieldOptions2 = [
     'options' => ['class' => 'form-group has-feedback'],
     'inputTemplate' => "{input}<span class='glyphicon glyphicon-lock form-control-feedback'></span>"
 ];
 ?>
+
 <div class="login-box">
     <div class="login-logo">
         <a href="#"><b>MY</b> LMS</a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
-        <p class="login-box-msg">Signup  to MY LMS</p>
+        <p class="login-box-msg">Sign in to start your session</p>
 
         <?php $form = ActiveForm::begin(['id' => 'login-form', 'enableClientValidation' => false]); ?>
 
@@ -40,20 +35,18 @@ $fieldOptions3 = [
             ->label(false)
             ->textInput(['placeholder' => $model->getAttributeLabel('username')]) ?>
 
-         <?= $form
-            ->field($model, 'email', $fieldOptions2)
-            ->label(false)
-            ->textInput(['placeholder' => $model->getAttributeLabel('email')]) ?>
-
         <?= $form
-            ->field($model, 'password', $fieldOptions3)
+            ->field($model, 'password', $fieldOptions2)
             ->label(false)
             ->passwordInput(['placeholder' => $model->getAttributeLabel('password')]) ?>
 
         <div class="row">
+            <div class="col-xs-8">
+                <?= $form->field($model, 'rememberMe')->checkbox() ?>
+            </div>
             <!-- /.col -->
-            <div class="col-xs-12">
-                <?= Html::submitButton('Signup <i class="fa fa-sign-in" aria-hidden="true"></i>', ['class' => 'btn btn-primary btn-block btn-flat', 'name' => 'login-button']) ?>
+            <div class="col-xs-4">
+                <?= Html::submitButton('Sign in', ['class' => 'btn btn-primary btn-block btn-flat', 'name' => 'login-button']) ?>
             </div>
             <!-- /.col -->
         </div>
@@ -63,14 +56,15 @@ $fieldOptions3 = [
 
         <div class="social-auth-links text-center">
             <p>- OR -</p>
-            <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Register
-                with Facebook</a>
-            <a href="#" class="btn btn-block btn-social btn-google-plus btn-flat"><i class="fa fa-google-plus"></i> Register
-                with Google+</a>
+            <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in
+                using Facebook</a>
+            <a href="#" class="btn btn-block btn-social btn-google-plus btn-flat"><i class="fa fa-google-plus"></i> Sign
+                in using Google+</a>
         </div>
         <!-- /.social-auth-links -->
 
-        <a href="<?= Url::to(['site/login'])?>" class="text-center">Sighn In</a>
+        <a href="<?= Url::to(['site/request-password-reset'])?>">I forgot my password</a><br>
+        <a href="<?= Url::to(['site/signup'])?>" class="text-center">Register a new membership</a>
 
     </div>
     <!-- /.login-box-body -->

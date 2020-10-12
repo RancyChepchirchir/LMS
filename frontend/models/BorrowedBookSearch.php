@@ -18,7 +18,7 @@ class BorrowedBookSearch extends BorrowedBook
     {
         return [
             [['bbId', 'studentId', 'bookId'], 'integer'],
-            [['borrowDate', 'expectedReturn', 'returnDate', 'actualReturn'], 'safe'],
+            [['borrowDate', 'expectedReturn', 'actualReturnDate'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class BorrowedBookSearch extends BorrowedBook
      */
     public function search($params)
     {
-        $query = BorrowedBook::find()->where(['actualReturn'=>NULL]);
+        $query = BorrowedBook::find()->where(['actualReturnDate'=>NULL]);
 
         // add conditions that should always apply here
 
@@ -63,8 +63,7 @@ class BorrowedBookSearch extends BorrowedBook
             'bookId' => $this->bookId,
             'borrowDate' => $this->borrowDate,
             'expectedReturn' => $this->expectedReturn,
-            'returnDate' => $this->returnDate,
-            'actualReturn' => $this->actualReturn,
+            'actualReturnDate' => $this->actualReturnDate,
         ]);
 
         return $dataProvider;

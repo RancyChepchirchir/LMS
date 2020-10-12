@@ -25,9 +25,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'expectedReturn') ?>
 
-    <?php // echo $form->field($model, 'returnDate') ?>
-
-    <?php // echo $form->field($model, 'actualReturn') ?>
+    <?php // echo $form->field($model, 'actualReturnDate') ?>
 
 
     <div class="form-group">

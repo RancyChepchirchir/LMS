@@ -62,35 +62,42 @@ class BbController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-     public function actionCreate()
+    public function actionCreate()
     {
         $model = new BorrowedBook();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if($this->bookUpdate($model->bookId)){
                 return $this->redirect(['index']);
             }
         }
+
         return $this->renderAjax('create', [
             'model' => $model,
         ]);
     }
-
+    
     public function bookUpdate($bookId){
         $command = \Yii::$app->db->createCommand('UPDATE book SET status=1 WHERE bookId='.$bookId);
         $command->execute();
         return true;
     }
-
+    
+    
     public function actionReturnbook($id){
+        
         $model = $this->findModel($id);
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->updateAfterDelete($model->bookId);
             return $this->redirect(['index']);
         }
+        
         return $this->renderAjax('returnbook',[
             'model'=>$model,
         ]);
     }
+
     /**
      * Updates an existing BorrowedBook model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -118,19 +125,21 @@ class BbController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-     public function actionDelete($id)
-     {
-         $bookId = BorrowedBook::find()->where(['bbId'=>$id])->one();
-         $this->findModel($id)->delete();
-         $this->updateAfterDelete($bookId->bookId);
-         return $this->redirect(['index']);
-     }
+    public function actionDelete($id)
+    {
+        $bookId = BorrowedBook::find()->where(['bbId'=>$id])->one();
+        $this->findModel($id)->delete();
+        $this->updateAfterDelete($bookId->bookId);
 
-     public function updateAfterDelete($bookId){
-         $command = \Yii::$app->db->createCommand('UPDATE book SET status=0 WHERE bookId='.$bookId);
-         $command->execute();
-         return true;
-     }
+        return $this->redirect(['index']);
+    }
+    
+    public function updateAfterDelete($bookId){
+        $command = \Yii::$app->db->createCommand('UPDATE book SET status=0 WHERE bookId='.$bookId);
+        $command->execute();
+        return true;
+    }
+
     /**
      * Finds the BorrowedBook model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

@@ -2,13 +2,11 @@
 
 use yii\bootstrap\Modal;
 use frontend\models\Book;
-use frontend\models\BorrowedBook;
 
 /* @var $this yii\web\View */
 
 $this->title = 'MY LMS';
 $totalBooks = Book::find()->asArray()->all();
-$bb = BorrowedBook::find()->asArray()->all();
 ?>
 <div class="row">
         <div class="col-md-3 col-sm-6 col-xs-12">
@@ -69,13 +67,15 @@ $bb = BorrowedBook::find()->asArray()->all();
         <!-- /.col -->
       </div>
 
-
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
         	<div style="padding-top: 20px;">
-        	   <button type="button" class="btn btn-block btn-success btn-lg assighnbook" style="width: 300px;"><i class="fa fa-plus" aria-hidden="true"></i> Assighn a Book</button>
+        <?php if(Yii::$app->user->can('admin')) ?>
+        	   <button type="button" class="btn btn-block btn-success btn-lg assignbook" style="width: 300px;"><i class="fa fa-plus" aria-hidden="true"></i> Assign a Book</button>
+        <?php if(Yii::$app->user->can('student'))?>
+           <button type="button" class="btn btn-block btn-success btn-lg requestbook" style="width: 300px;"><i class="fa fa-plus" aria-hidden="true"></i> Borrow a Book</button>
             </div>
             <div style="text-align: center;">
                  <h2 class="box-title"><strong>BOOK ASSIGNMENTS</strong></h2>
@@ -119,7 +119,7 @@ $bb = BorrowedBook::find()->asArray()->all();
 
      <?php
         Modal::begin([
-            'header'=>'<h4>Assighn A Book</h4>',
+            'header'=>'<h4>Assign A Book</h4>',
             'id'=>'assignbook',
             'size'=>'modal-lg'
             ]);

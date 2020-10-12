@@ -11,7 +11,7 @@ use Yii;
  * @property string $bookName
  * @property string $referenceNo
  * @property string $publisher
- * @property int $status status 0 book available, status 1 book taken, status 2 book pending
+ * @property int $status Status 0 Represents available, status 1 represents issued, status 2 represents pending
  *
  * @property BookAuthor[] $bookAuthors
  * @property BorrowedBook[] $borrowedBooks

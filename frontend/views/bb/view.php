@@ -34,8 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'bookId',
             'borrowDate',
             'expectedReturn',
-            'returnDate',
-            'actualReturn'
+            'actualReturnDate',
         ],
     ]) ?>
 

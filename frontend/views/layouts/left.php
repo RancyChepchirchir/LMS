@@ -1,5 +1,7 @@
 <aside class="main-sidebar">
+
     <section class="sidebar">
+
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
@@ -7,9 +9,11 @@
             </div>
             <div class="pull-left info">
                 <p>Library System</p>
+
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
+
         <!-- search form -->
         <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
@@ -76,17 +80,18 @@
             ]
         ) ?>
 <?php }?>
-
 <?php if(Yii::$app->user->can('student')){?>
         <?= dmstr\widgets\Menu::widget(
             [
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
-                  //  ['label' => 'DASHBOARD', 'icon' => 'home', 'url' => ['/site/index']],
-                    ['label' => 'CATALOG', 'icon' => 'book', 'url' => ['/book/index'], 'return'],
+                    ['label' => 'DASHBOARD', 'icon' => 'home', 'url' => ['/site/index']],
+                    ['label' => 'CATALOG', 'icon' => 'book', 'url' => ['/book/index']],
                 ],
             ]
         ) ?>
+
 <?php }?>
     </section>
+
 </aside>

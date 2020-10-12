@@ -1,28 +1,33 @@
 <?php
+
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\bootstrap\Modal;
 use frontend\models\Book;
 use frontend\models\BorrowedBook;
 use frontend\models\Student;
+
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\BorrowedBookSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = 'MY LMS';
+
+$this->title = 'JAMES LMS';
 $this->params['breadcrumbs'][] = $this->title;
+
 $totalBooks = Book::find()->asArray()->all();
 $bb = BorrowedBook::find()->asArray()->all();
 $totalStudents = Student::find()->asArray()->all();
-$overdueBooks = BorrowedBook::find()->Where('expectedReturn < '.date('yy/m/d'))->andWhere(['actualReturn'=>NULL])->asArray()->all();
-/*$overdueBooks = BorrowedBook::find()->asArray()->all();*/
+$overdue = BorrowedBook::find()->where('expectedReturn > '.date('yy/m/d'))->andWhere(['actualReturnDate'=>NULL])->asArray()->all();
+
 ?>
 <div class="row">
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
             <span class="info-box-icon bg-green"><i class="fa fa-book"></i></span>
+
             <div class="info-box-content">
               <span class="info-box-text">TOTAL BOOKS</span>
-              <span class="info-box-number"><?=count($totalBooks)?><small></small></span>
+              <span class="info-box-number"><?= count($totalBooks)?><small></small></span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -32,23 +37,27 @@ $overdueBooks = BorrowedBook::find()->Where('expectedReturn < '.date('yy/m/d'))-
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
             <span class="info-box-icon bg-yellow"><i class="fa fa-book"></i></span>
+
             <div class="info-box-content">
               <span class="info-box-text">BORROWED BOOKS</span>
-              <span class="info-box-number"><?=count($bb)?></span>
+              <span class="info-box-number"><?= count($bb)?></span>
             </div>
             <!-- /.info-box-content -->
           </div>
           <!-- /.info-box -->
         </div>
         <!-- /.col -->
+
         <!-- fix for small devices only -->
         <div class="clearfix visible-sm-block"></div>
+
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
             <span class="info-box-icon bg-red"><i class="fa fa-book"></i></span>
+
             <div class="info-box-content">
               <span class="info-box-text">OVERDUE BOOKS</span>
-              <span class="info-box-number"><?=count($overdueBooks)?></span>
+              <span class="info-box-number"><?= count($overdue)?></span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -58,9 +67,10 @@ $overdueBooks = BorrowedBook::find()->Where('expectedReturn < '.date('yy/m/d'))-
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
             <span class="info-box-icon bg-aqua"><i class="fa fa-users"></i></span>
+
             <div class="info-box-content">
               <span class="info-box-text">TOTAL STUDENTS</span>
-              <span class="info-box-number"><?=count($totalStudents)?></span>
+              <span class="info-box-number"><?= count($totalStudents) ?></span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -68,6 +78,8 @@ $overdueBooks = BorrowedBook::find()->Where('expectedReturn < '.date('yy/m/d'))-
         </div>
         <!-- /.col -->
       </div>
+
+
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
@@ -81,6 +93,7 @@ $overdueBooks = BorrowedBook::find()->Where('expectedReturn < '.date('yy/m/d'))-
               <div class="box-tools">
                 <div class="input-group input-group-sm hidden-xs" style="width: 300px;">
                   <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+
                   <div class="input-group-btn">
                       <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
                     <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
@@ -90,12 +103,12 @@ $overdueBooks = BorrowedBook::find()->Where('expectedReturn < '.date('yy/m/d'))-
             </div>
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
-              <?= GridView::widget([
+                <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
-
+            
                         //'bbId',
                         [
                             'attribute' => 'studentId',
@@ -125,16 +138,15 @@ $overdueBooks = BorrowedBook::find()->Where('expectedReturn < '.date('yy/m/d'))-
                             return $date->format('F j, Y,');
                             },
                         ],
-                        'actualReturn',
+                        'actualReturnDate',
                         [
                             'label'=>'Return Book',
                             'format' => 'raw',
                             'value' => function ($dataProvider) {
                             return '<span val="'.$dataProvider->bbId.'" class="btn btn-danger returnbook">Return</span>';
                             },
-
+                            
                         ],
-
                         [
                             'label'=>'Status',
                             'format' => 'raw',
@@ -149,35 +161,40 @@ $overdueBooks = BorrowedBook::find()->Where('expectedReturn < '.date('yy/m/d'))-
                                 }
                                 return '<span class="btn btn-info">'.$status.'</span>';
                             },
-
+                            
                         ],
-
+                            
                         ['class' => 'yii\grid\ActionColumn'],
                     ],
                 ]); ?>
-
+ 
             </div>
-                <!-- /.box-body -->
-              </div>
-              <!-- /.box -->
-            </div>
+            <!-- /.box-body -->
           </div>
-      <?php
+          <!-- /.box -->
+        </div>
+      </div>
+
+
+
+	<?php
         Modal::begin([
             'header'=>'<h4>Return Book</h4>',
             'id'=>'returnbook',
             'size'=>'modal-md'
             ]);
+
         echo "<div id='returnbookContent'></div>";
         Modal::end();
-        ?>
-        
-          <?php
+      ?>
+
+   <?php
         Modal::begin([
-            'header'=>'<h4>Assign Book</h4>',
+            'header'=>'<h4>Assighn A Book</h4>',
             'id'=>'assignbook',
-            'size'=>'modal-md'
+            'size'=>'modal-lg'
             ]);
+
         echo "<div id='assignbookContent'></div>";
         Modal::end();
       ?>

@@ -12,6 +12,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
             'action' =>['book/addauthor'],
             'method'=>'post',
+            'id'=>'adda'
         ]); ?>
 
         <?= $form->field($model, 'authorName') ?>
