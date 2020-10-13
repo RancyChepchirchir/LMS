@@ -40,7 +40,14 @@ class BorrowedBookSearch extends BorrowedBook
      */
     public function search($params)
     {
-        $query = BorrowedBook::find()->where(['actualReturnDate'=>NULL]);
+       
+        if(\Yii::$app->user->can('librarian')){
+            $query = BorrowedBook::find()->where(['actualReturnDate'=>NULL]);
+        }
+        if(\Yii::$app->user->can('student')){
+            $studentId = Student::find()->where(['userId'=>\yii::$app->user->id])->one();
+            $query = BorrowedBook::find()->where(['actualReturnDate'=>NULL])->andWhere(['studentId'=>$studentId->studentsId]);
+        }
 
         // add conditions that should always apply here
 

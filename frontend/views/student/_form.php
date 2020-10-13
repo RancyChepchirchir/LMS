@@ -14,10 +14,7 @@ $users = ArrayHelper::map(User::find()->all(), 'id', 'username');
 
 <div class="student-form">
 
-      <?php $form = ActiveForm::begin();
-    @{:PZXStuy8=~q}a{sleep(VTAE4B6
-      ]-5LT]=
-      )}
+    <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'userId')->dropDownList($users) ?>
 

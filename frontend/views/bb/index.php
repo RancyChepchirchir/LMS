@@ -11,11 +11,17 @@ use frontend\models\Student;
 /* @var $searchModel frontend\models\BorrowedBookSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'JAMES LMS';
+$this->title = 'MY LMS';
 $this->params['breadcrumbs'][] = $this->title;
 
 $totalBooks = Book::find()->asArray()->all();
-$bb = BorrowedBook::find()->asArray()->all();
+if(\Yii::$app->user->can('student')){
+    $studentId = Student::find()->where(['userId'=>\yii::$app->user->id])->one();
+    $bb = BorrowedBook::find()->Where(['studentId'=>$studentId->studentsId])->andWhere(['actualReturnDate'=>NULL])->asArray()->all();
+}
+if(\Yii::$app->user->can('librarian')){
+    $bb = BorrowedBook::find()->andWhere(['actualReturnDate'=>NULL])->asArray()->all();
+}
 $totalStudents = Student::find()->asArray()->all();
 $overdue = BorrowedBook::find()->where('expectedReturn > '.date('yy/m/d'))->andWhere(['actualReturnDate'=>NULL])->asArray()->all();
 
@@ -85,7 +91,12 @@ $overdue = BorrowedBook::find()->where('expectedReturn > '.date('yy/m/d'))->andW
           <div class="box">
             <div class="box-header">
         	<div style="padding-top: 20px;">
-        	   <button type="button" class="btn btn-block btn-success btn-lg assighnbook" style="width: 300px;"><i class="fa fa-plus" aria-hidden="true"></i> Assighn a Book</button>
+        	<?php if(\Yii::$app->user->can('student')){?>
+        	      <button val="create" type="button" class="btn btn-block btn-success btn-lg borrowbook" style="width: 300px;"><i class="fa fa-plus" aria-hidden="true"></i> Borrow a Book</button>
+        	<?php }?>
+        	<?php if(\Yii::$app->user->can('librarian')){?>
+        	     <button type="button" class="btn btn-block btn-success btn-lg assighnbook" style="width: 300px;"><i class="fa fa-plus" aria-hidden="true"></i> Assighn a Book</button>
+        	<?php }?>
             </div>
             <div style="text-align: center;">
                  <h2 class="box-title"><strong>BOOK ASSIGNMENTS</strong></h2>
@@ -108,7 +119,7 @@ $overdue = BorrowedBook::find()->where('expectedReturn > '.date('yy/m/d'))->andW
                     'filterModel' => $searchModel,
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
-            
+
                         //'bbId',
                         [
                             'attribute' => 'studentId',
@@ -143,9 +154,12 @@ $overdue = BorrowedBook::find()->where('expectedReturn > '.date('yy/m/d'))->andW
                             'label'=>'Return Book',
                             'format' => 'raw',
                             'value' => function ($dataProvider) {
-                            return '<span val="'.$dataProvider->bbId.'" class="btn btn-danger returnbook">Return</span>';
+                            if(\Yii::$app->user->can('librarian')){
+                                return '<span val="'.$dataProvider->bbId.'" class="btn btn-danger returnbook">Return</span>';
+                                }
+                            return '';
                             },
-                            
+
                         ],
                         [
                             'label'=>'Status',
@@ -153,21 +167,36 @@ $overdue = BorrowedBook::find()->where('expectedReturn > '.date('yy/m/d'))->andW
                             'value' => function ($dataProvider) {
                                 $bookStatus = Book::find()->where(['bookId'=>$dataProvider->bookId])->One();
                                 if($bookStatus->status == 0){
+                                    $button = 'btn btn-info';
                                     $status = 'Available';
                                 }elseif ($bookStatus->status == 1){
+                                    $button = 'btn btn-success';
                                     $status = 'Issued';
                                 }elseif ($bookStatus->status == 2){
+                                    $button = 'btn btn-warning';
                                     $status = 'Pending';
                                 }
-                                return '<span class="btn btn-info">'.$status.'</span>';
+                                return '<span class="'.$button.'">'.$status.'</span>';
                             },
-                            
+
                         ],
-                            
+                        [
+                            'label'=>'Approve Books',
+                            'format' => 'raw',
+                            'value' => function ($dataProvider) {
+                            $bookStatus = Book::find()->where(['bookId'=>$dataProvider->bookId])->One();
+                            if(\Yii::$app->user->can('librarian') && $bookStatus->status == 2){
+                                return Html::a('Approve', ['approve','id'=>$dataProvider->bookId,'studentId'=>$dataProvider->studentId], ['class' => 'btn btn-success']);
+                            }
+                            return '';
+                            },
+
+                         ],
+
                         ['class' => 'yii\grid\ActionColumn'],
                     ],
                 ]); ?>
- 
+
             </div>
             <!-- /.box-body -->
           </div>

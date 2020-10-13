@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\BookSearch */
@@ -21,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
           			<?= Html::a('Create Book', ['create'], ['class' => 'btn btn-success']) ?>
           	<?php }?>
            <?php if(Yii::$app->user->can('student')){ ?>
-                <?= Html::a('Brorrow Book', ['borrowbook'], ['class' => 'btn btn-success']) ?>
+                  <button val="<?= Yii::$app->request->baseUrl;?>/bb/create" type="button" class="btn btn-block btn-success btn-lg borrowbook" style="width: 300px;"><i class="fa fa-plus" aria-hidden="true"></i> Borrow a Book</button>
            <?php }?>
           
           
@@ -55,4 +56,15 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <!-- /.box-body -->
           </div>
+          
+      <?php
+        Modal::begin([
+            'header'=>'<h4>Assighn A Book</h4>',
+            'id'=>'assignbook',
+            'size'=>'modal-lg'
+            ]);
+
+        echo "<div id='assignbookContent'></div>";
+        Modal::end();
+      ?>
 

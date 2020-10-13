@@ -8,6 +8,8 @@ use frontend\models\BorrowedBookSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use frontend\models\Student;
+use frontend\models\Book;
 
 /**
  * BbController implements the CRUD actions for BorrowedBook model.
@@ -62,37 +64,63 @@ class BbController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($borrow=0)
     {
         $model = new BorrowedBook();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if($this->bookUpdate($model->bookId)){
+            if($this->bookUpdate($model->bookId,$borrow)){
                 return $this->redirect(['index']);
             }
         }
 
-        return $this->renderAjax('create', [
+       return $this->renderAjax('create', [
             'model' => $model,
+            'borrow'=>$borrow,
         ]);
     }
-    
-    public function bookUpdate($bookId){
+
+    public function bookUpdate($bookId,$borrow){
+        if($borrow==1){
+            $command = \Yii::$app->db->createCommand('UPDATE book SET status=2 WHERE bookId='.$bookId);
+            $command->execute();
+            return true;
+        }
         $command = \Yii::$app->db->createCommand('UPDATE book SET status=1 WHERE bookId='.$bookId);
         $command->execute();
         return true;
     }
-    
-    
+
+    public function actionApprove($id,$studentId){
+        $command = \Yii::$app->db->createCommand('UPDATE book SET status=1 WHERE bookId='.$id);
+        $command->execute();
+        $this->createNotification($studentId,$id);
+        return $this->redirect(['index']);
+    }
+
+
+    public function createNotification($studentId,$bookId){
+        $book = Book::find()->where(['bookId'=>$bookId])->one();
+        $icon= 'fa fa-book';
+        $userId = Student::find()->where(['studentsId'=>$studentId])->one();
+        \Yii::$app->db->createCommand()->insert('notifications', [
+            'icon' => $icon,
+            'userId' => $userId->userId,
+            'message'=> 'Your request for book '.$book->bookName.' has been approved.'
+        ])->execute();
+        return true;
+    }
+
+
     public function actionReturnbook($id){
-        
+
         $model = $this->findModel($id);
-        
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->updateAfterDelete($model->bookId);
             return $this->redirect(['index']);
         }
-        
+
         return $this->renderAjax('returnbook',[
             'model'=>$model,
         ]);
@@ -133,7 +161,7 @@ class BbController extends Controller
 
         return $this->redirect(['index']);
     }
-    
+
     public function updateAfterDelete($bookId){
         $command = \Yii::$app->db->createCommand('UPDATE book SET status=0 WHERE bookId='.$bookId);
         $command->execute();

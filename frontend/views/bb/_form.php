@@ -22,9 +22,13 @@ $books = ArrayHelper::map(Book::find()->where(['status'=>0])->all(), 'bookId', '
     
      <?= $form->field($model, 'borrowDate')->hiddenInput(['value'=>date('yy/m/d')])->label(false) ?>
     
-
-    <?= $form->field($model, 'studentId')->dropDownList($sudents) ?>
-
+    <?php if($borrow==1){
+        $studentId = Student::find()->where(['userId'=>\yii::$app->user->id])->one();
+     ?>
+        <?= $form->field($model, 'studentId')->hiddenInput(['value'=>$studentId->studentsId])->label(false) ?>
+    <?php }else{?>
+    	<?= $form->field($model, 'studentId')->dropDownList($sudents) ?>
+	<?php }?>
     <?= $form->field($model, 'bookId')->dropDownList($books) ?>
 
 
